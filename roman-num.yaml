@@ -1,0 +1,57 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  Roman Numerals Converter - AWS CloudFormation Template
+
+Parameters:
+  ImageIdParameter:
+    Description: "Region specific image from the Parameter for the latest Amazon Linux 2023 AMI ID"
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64" #latest Amazon Linux 2023 AMI ID
+  myKeyNameParameter:
+    Description: Select your keypair.
+    Type: AWS::EC2::KeyPair::KeyName
+
+Resources:
+  myWebServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref ImageIdParameter
+      InstanceType: t2.micro
+      KeyName: !Ref myKeyNameParameter
+      SecurityGroups:
+        - !Ref mySG
+      Tags:
+        - Key: Name
+          Value: !Sub 'Web Server of ${AWS::StackName}'
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash 
+          yum update -y
+          yum install python3-pip git -y
+          pip3 install Flask
+          cd /home/ec2-user
+          git clone https://github.com/mesudp/roman-num-convertor.git
+          cd roman-num-convertor 
+          python3 app.py
+
+
+
+
+  mySG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Allows SSH and HTTP from anywhere" # Required
+      SecurityGroupIngress: 
+        - CidrIp: 0.0.0.0/0  # Allows SSH from anywhere
+          FromPort: 22 
+          IpProtocol: tcp
+          ToPort: 22
+        - CidrIp: 0.0.0.0/0  # Allows HTTP from anywhere 
+          FromPort: 80
+          IpProtocol: tcp
+          ToPort: 80
+
+Outputs:
+  WebsiteURL:
+    Description: 'Static Website URL'
+    Value: !Sub "http://${myWebServer.PublicDnsName}"
