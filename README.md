@@ -42,7 +42,7 @@ You can deploy the web application using **AWS CloudFormation**. This will creat
    
    - Go to the **AWS Management Console** and navigate to the **CloudFormation** service.
    - Click on **Create Stack** and choose **With new resources (standard)**.
-   - Upload the provided CloudFormation template (`template.yaml`) that is already attached to this repository. This template automates the deployment of your EC2 instance and Flask app.
+   - Upload the provided CloudFormation template (`roman-num.yaml`) that is already attached to this repository. This template automates the deployment of your EC2 instance and Flask app.
    
 2. **Configure Parameters**:
    - **AMI ID**: The template uses the latest Amazon Linux 2023 AMI by default. If needed, you can specify a different AMI ID.
