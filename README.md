@@ -26,6 +26,11 @@ This project provides a web application to convert **decimal numbers** into **Ro
 |----static
         |----mesudwork.jpg  # Given to the students (HTML template)
 ```
+
+## Expected Outcome
+
+![Project 001 Snapshot](project-001-snapshot.png)
+
 ---
 ## How to Deploy
 
